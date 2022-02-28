@@ -120,4 +120,17 @@ public class MemberDaoImpl implements IMemberDao {
 		}
 		return memList;
 	}
+
+	@Override
+	public MemberVO getMember(String memId) {
+		MemberVO mv;
+
+		try {
+			mv = (MemberVO) smc.queryForObject("member.getMember", memId);
+		} catch (SQLException ex) {
+			throw new RuntimeException("회원정보 조회중 예외발생", ex);
+		}
+
+		return mv;
+	}
 }

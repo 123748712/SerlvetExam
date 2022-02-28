@@ -76,21 +76,21 @@
  	
  	</select>
  	
-<!--  	<select id="getMember" parameterClass="String" resultMap="memMap"> -->
- 	
-<!--  	SELECT * -->
-<!--  	FROM MYMEMBER -->
-<!--  	WHERE MEM_ID = #memId# -->
- 	
-<!--  	</select> -->
-
- 	<select id="getMember" parameterClass="String" resultClass="hashMap">
+ 	<select id="getMember" parameterClass="String" resultMap="memMap">
  	
  	SELECT *
  	FROM MYMEMBER
  	WHERE MEM_ID = #memId#
  	
  	</select>
+
+<!--  	<select id="getMember" parameterClass="String" resultClass="hashMap"> -->
+ 	
+<!--  	SELECT * -->
+<!--  	FROM MYMEMBER -->
+<!--  	WHERE MEM_ID = #memId# -->
+ 	
+<!--  	</select> -->
  	
  	<select id="checkMember" resultClass="int">
  	

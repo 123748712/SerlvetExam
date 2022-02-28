@@ -36,4 +36,9 @@ public interface IMemberDao {
 	// mv => 검색할 자료가 들어있는 MemberVO 객체
 	// return => 검색 결과를 담은 List 객체
 	public List<MemberVO> searchMember(MemberVO mv);
+	
+	// 주어진 회원 ID를 이용하여 회원정보를 알아내는 메서드
+	// memId => 검색할 회원ID
+	// return => 해당 회원 아이디가 있으면 해당 회원 정보
+	public MemberVO getMember(String memId);
 }
