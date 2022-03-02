@@ -4,6 +4,7 @@
 	pageEncoding="UTF-8"%>
 <%
 	List<MemberVO> memList = (List<MemberVO>) request.getAttribute("memList");
+	String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
 %>
 <!DOCTYPE html>
 <html>
@@ -28,7 +29,7 @@
 %>
 		<tr>
 			<td><%=memList.get(i).getMemId() %></td>
-			<td><%=memList.get(i).getMemName() %></td>
+			<td><a href="detail.do?memId=<%=memList.get(i).getMemId()%>"><%=memList.get(i).getMemName() %></a></td>
 			<td><%=memList.get(i).getMemTel() %></td>
 			<td><%=memList.get(i).getMemAddr() %></td>
 		</tr>
@@ -41,5 +42,14 @@
 	</tr>
 	</table>
 </form>
+<%
+	if(msg.equals("성공")	){
+%>
+<script>
+	alert('정상적으로 처리 되었습니다.');	
+</script>
+<%	
+	}
+%>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package kr.or.ddit.member.controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -49,13 +50,14 @@ public class InsertMemberController extends HttpServlet {
 			msg = "실패";
 		}
 		
-		req.setAttribute("msg", msg);
+//		req.setAttribute("msg", msg); // forward 방식에서 사용
 		
 		// 4. 목록조회 화면 이동, 포워드 방식
 //		req.getRequestDispatcher("/member/list.do").forward(req, resp);
 		
+		
 		// 리다이렉트 방식
-		String redirectUrl = req.getContextPath() + "/member/list.do?msg=" + msg;
+		String redirectUrl = req.getContextPath() + "/member/list.do?msg=" + URLEncoder.encode(msg, "UTF-8");
 		resp.sendRedirect(redirectUrl);
 	}
 }

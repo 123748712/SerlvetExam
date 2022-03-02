@@ -1,6 +1,7 @@
 package kr.or.ddit.member.controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +14,7 @@ import kr.or.ddit.member.service.MemberServiceImpl;
 import kr.or.ddit.member.vo.MemberVO;
 
 @WebServlet("/member/update.do")
-public class updateMemberController extends HttpServlet {
+public class UpdateMemberController extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,6 +30,7 @@ public class updateMemberController extends HttpServlet {
 		
 		// 2. req객체에 회원정보 저장
 		req.setAttribute("mv", mv);
+		// response 하기 전까지는 존재한다. 
 		
 		// 3. VIEW 화면으로 이동
 		req.getRequestDispatcher("/view/member/updateForm.jsp").forward(req, resp);
@@ -46,14 +48,14 @@ public class updateMemberController extends HttpServlet {
 		// 2. 서비스 객체 생성하기
 		IMemberService memService = MemberServiceImpl.getInstance();
 		
-		// 3. 회원정보 등록
+		// 3. 회원정보 수정
 		MemberVO mv = new MemberVO();
 		mv.setMemId(memId);
 		mv.setMemName(memName);
 		mv.setMemTel(memTel);
 		mv.setMemAddr(memAddr);
 		
-		int cnt = memService.insertMember(mv);
+		int cnt = memService.updateMember(mv);
 	
 		String msg = "";
 		
@@ -63,13 +65,13 @@ public class updateMemberController extends HttpServlet {
 			msg = "실패";
 		}
 		
-		req.setAttribute("msg", msg);
+//		req.setAttribute("msg", msg);
 		
 		// 4. 목록조회 화면 이동, 포워드 방식
 //		req.getRequestDispatcher("/member/list.do").forward(req, resp);
 		
 		// 리다이렉트 방식
-		String redirectUrl = req.getContextPath() + "/member/list.do?msg=" + msg;
+		String redirectUrl = req.getContextPath() + "/member/list.do?msg=" + URLEncoder.encode(msg, "UTF-8");
 		resp.sendRedirect(redirectUrl);
 	}
 }

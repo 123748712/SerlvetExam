@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	MemberVO mv;
+	MemberVO mv = (MemberVO) request.getAttribute("mv");
 %>
 <!DOCTYPE html>
 <html>
@@ -11,7 +11,9 @@
 <title>회원정보 변경</title>
 </head>
 <body>
-	<form action="updateMember" method="post">
+	<form action="update.do" method="post"> <!-- 상대경로 -->
+<!--<form action="/ServletExam/member/update.do" method="post"> / 절대경로 (=request.getContextPath()) -->
+		<input type="hidden" name="memId" value="<%=mv.getMemId() %>">
 		<table>
 			<tr>
 				<td>I D:</td>
