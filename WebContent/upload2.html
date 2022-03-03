@@ -20,6 +20,7 @@
 
     <h3>서블릿3부터 지원하는 Part 인터페이스를 이용한 파일업로드</h3>
     <form method="post" action="uploadTest2.do" enctype="multipart/form-data"> <!-- action="/ServletExam/uploadtTest2.do" -->
+    <!-- multipart/form-data | boundary => 메세지 파트를 구분하는 역할, 메세지의 시작과 끝에 나타남 (------------------로 구분함) -->
         파일선택: <input type="file" name="multiPartServlet"/>
         전송자: <input type="text" name="sender">
         <input type="submit" value="Upload"/>

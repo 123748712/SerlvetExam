@@ -30,8 +30,8 @@
  	<insert id="insertMember" parameterClass="kr.or.ddit.member.vo.MemberVO">
  	
  	INSERT INTO mymember (
- 	mem_id,mem_name,mem_tel,mem_addr)
- 	VALUES (#memId#, #memName#, #memTel#, #memAddr#)
+ 	mem_id,mem_name,mem_tel,mem_addr, atch_file_id)
+ 	VALUES (#memId#, #memName#, #memTel#, #memAddr#, #atchFileId#)
  	<!-- ## 안에 속성을 자동으로 찾아준다. (= mv.getMemId()) -->
  	
  	</insert>
@@ -42,6 +42,7 @@
  	SET MEM_NAME = #memName#
  		, MEM_TEL = #memTel#
  		, MEM_ADDR = #memAddr#
+ 		, ATCH_FILE_ID = #atchFileId#
 	WHERE MEM_ID = #memId#
  	
  	</update>
@@ -67,6 +68,7 @@
  		<result property="memName" column="mem_name"/>
  		<result property="memTel" column="mem_tel"/>
  		<result property="memAddr" column="mem_addr"/>
+ 		<result property="atchFileId" column="atch_file_id"/>
  	</resultMap>
  	
  	<select id="getMemberAll" resultMap="memMap">

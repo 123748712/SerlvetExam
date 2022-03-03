@@ -36,7 +36,7 @@ public class UploadServlet2 extends HttpServlet {
 			for (Part part : req.getParts()) {
 				fileName = getFileName(part);
 
-				if (fileName != null && !fileName.equals("")) {
+				if (fileName != null && !fileName.equals("")) { // "" => 파일 선택을 하지 않은 상태로 upload한 상황
 					part.write(uploadPath + File.separator + fileName); // 파일 업로드
 					System.out.println("파일 명 : " + fileName + " 업로드 완료.");
 				}
@@ -47,7 +47,6 @@ public class UploadServlet2 extends HttpServlet {
 		resp.setContentType("text/plan");
 		resp.getWriter().println("sender : " + req.getParameter("sender"));
 		resp.getWriter().println("업로드 완료.");
-
 	}
 
 	// Part객체 파싱하여 파일이름 추출하기
@@ -56,15 +55,16 @@ public class UploadServlet2 extends HttpServlet {
 		/*
 		 * Content-Disposition 헤더
 		 * 
-		 * 2. multipart body를 위한 헤더정보로 사용되는 경우 Content-Disposition : form-data
-		 * Content-Disposition : form-data; name="feildName" Content-Disposition :
-		 * form-data; name="feildName"; filename="abc.jpg"
+		 * 2. multipart body를 위한 헤더정보로 사용되는 경우
+		 * Content-Disposition : form-data
+		 * Content-Disposition : form-data; name="feildName"
+		 * Content-Disposition : form-data; name="feildName"; filename="abc.jpg"
 		 */
 		for (String content : part.getHeader("Content-Disposition").split(";")) {
 			if (content.trim().startsWith("filename")) {
 				return content.substring(content.indexOf("=") + 1).trim().replace("\"", "");
 			}
 		}
-		return null;
+		return null; // return => null or filename
 	}
 }

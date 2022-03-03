@@ -25,6 +25,11 @@
 				<td>주소:</td>
 				<td><textarea name="memAddr" ></textarea></td>
 			</tr>
+			<tr>
+				<td>첨부파일</td>
+				<td><input type="file" name="atchFile" multiple></td>
+			</tr>
+			
 		</table>
 		<input type="submit" value="회원 등록">
 	</form>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="atchFile">
+
+	<resultMap class="kr.or.ddit.comm.vo.AtchFileVO" id="atchFileDetailMap">
+		<result property="atchFileId" column="ATCH_FILE_ID"/>
+		<result property="fileSn" column="FILE_SN"/>
+		<result property="fileStreCours" column="FILE_STRE_COURS"/>
+		<result property="streFileNm" column="STRE_FILE_NM"/>
+		<result property="orignlFileNm" column="ORIGNL_FILE_NM"/>
+		<result property="fileExtsn" column="FILE_EXTSN"/>
+		<result property="fileCn" column="FILE_CN"/>
+		<result property="fileSize" column="FILE_SIZE"/>
+	</resultMap>
+	
+	<insert id="insertAtchFile" parameterClass="kr.or.ddit.comm.vo.AtchFileVO">
+		<!--
+		key를 설정할 수 있는 태그, selectKey태그가 먼저 실행된다.
+		AtchFileVO에 있는 setAtchFileId 메서드를 호출해 값을 넣어주고  insert구문에 넣어준다.
+		-->
+		<selectKey keyProperty="atchFileId" resultClass="long">
+			select ATCH_FILE_SEQ.nextval from dual
+		</selectKey>
+		
+		insert into atch_file
+		(atch_file_id, creat_dt, use_at)
+		values(#atchFileId#, sysdate, 'Y')
+		
+	</insert>
+	
+	<insert id="insertAtchFileDetail">
+		<!-- 파일이 업로드 될때 insert구문이 실행됨 -->
+		insert into atch_file_detail
+		(
+		ATCH_FILE_ID
+		,FILE_SN
+		,FILE_STRE_COURS
+		,STRE_FILE_NM
+		,ORIGNL_FILE_NM
+		,FILE_EXTSN
+		,FILE_CN
+		,FILE_SIZE
+		)
+		values(
+		#atchFileId#
+		,(select nvl(max(file_sn), 0) + 1
+			from atch_file_detail
+			where atch_file_id = #atchFileId#)
+		,#fileStreCours#
+		,#streFileNm#
+		,#orignlFileNm#
+		,#fileExtsn#
+		,#fileCn#
+		,#fileSize#
+		)
+	</insert>
+	
+	<select id="getAtchFileList" resultMap="atchFileDetailMap">
+		select * from atch_file_detail
+		where atch_file_id = #atchFileId#
+	</select>
+	
+	<select id="getAtchFileDetail" resultMap="atchFileDetailMap">
+		select * from atch_file_detail
+		where atch_file_id = #atchFileId#
+		and file_sn = #fileSn#
+	</select>
+</sqlMap>
