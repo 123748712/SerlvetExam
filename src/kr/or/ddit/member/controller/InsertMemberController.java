@@ -4,16 +4,21 @@ import java.io.IOException;
 import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.or.ddit.comm.service.AtchFileServiceImpl;
+import kr.or.ddit.comm.service.IAtchFileService;
+import kr.or.ddit.comm.vo.AtchFileVO;
 import kr.or.ddit.member.service.IMemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
 import kr.or.ddit.member.vo.MemberVO;
 
 @WebServlet("/member/insert.do")
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 3, maxFileSize = 1024 * 1024 * 40, maxRequestSize = 1024 * 1024 * 50)
 public class InsertMemberController extends HttpServlet {
 	
 	@Override
@@ -32,13 +37,23 @@ public class InsertMemberController extends HttpServlet {
 		
 		// 2. 서비스 객체 생성하기
 		IMemberService memService = MemberServiceImpl.getInstance();
+		IAtchFileService fileService = AtchFileServiceImpl.getInstance();
 		
+		AtchFileVO atchFileVO = null;
+		
+		try {
+			atchFileVO = fileService.saveAtchFileList(req);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		// 3. 회원정보 등록
 		MemberVO mv = new MemberVO();
 		mv.setMemId(memId);
 		mv.setMemName(memName);
 		mv.setMemTel(memTel);
 		mv.setMemAddr(memAddr);
+		// 첨부파일 ID 저장
+		mv.setAtchFileId(atchFileVO.getAtchFileId());
 		
 		int cnt = memService.insertMember(mv);
 	

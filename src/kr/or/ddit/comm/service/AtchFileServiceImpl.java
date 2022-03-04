@@ -44,7 +44,7 @@ public class AtchFileServiceImpl implements IAtchFileService {
 			boolean isFirstFile = true; // 첫번째 파일 여부
 			for(Part part : req.getParts()) {
 				fileName = getFileName(part);
-				if(fileName != null && fileName.equals("")) {
+				if(fileName != null && !fileName.equals("")) {
 					if(isFirstFile) { // 첫번째 파일정보인지 체크
 						isFirstFile = false;
 						

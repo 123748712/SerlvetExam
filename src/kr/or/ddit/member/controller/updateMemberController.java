@@ -2,18 +2,24 @@ package kr.or.ddit.member.controller;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.or.ddit.comm.service.AtchFileServiceImpl;
+import kr.or.ddit.comm.service.IAtchFileService;
+import kr.or.ddit.comm.vo.AtchFileVO;
 import kr.or.ddit.member.service.IMemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
 import kr.or.ddit.member.vo.MemberVO;
 
 @WebServlet("/member/update.do")
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 3, maxFileSize = 1024 * 1024 * 40, maxRequestSize = 1024 * 1024 * 50)
 public class UpdateMemberController extends HttpServlet {
 	
 	@Override
@@ -23,11 +29,22 @@ public class UpdateMemberController extends HttpServlet {
 		// key값 구하기
 		String memId = req.getParameter("memId");
 		
-		// 1. 서비스 객체 생성하기
+		// 1-1. 서비스 객체 생성하기
 		IMemberService memService = MemberServiceImpl.getInstance();
 		
 		MemberVO mv = memService.getMember(memId);
 		
+		if(mv.getAtchFileId() > 0) { // 첨부파일이 존재한다면,
+			// 1-2. 첨부파일 정보 조회
+			IAtchFileService fileService = AtchFileServiceImpl.getInstance();
+			AtchFileVO atchFileVO = new AtchFileVO();
+			
+			atchFileVO.setAtchFileId(mv.getAtchFileId());
+			
+			List<AtchFileVO> atchFileList = fileService.getAtchFileList(atchFileVO);
+			
+			req.setAttribute("atchFileList", atchFileList);
+		}
 		// 2. req객체에 회원정보 저장
 		req.setAttribute("mv", mv);
 		// response 하기 전까지는 존재한다. 
@@ -45,8 +62,21 @@ public class UpdateMemberController extends HttpServlet {
 		String memTel = req.getParameter("memTel");
 		String memAddr = req.getParameter("memAddr");
 		
+		// 기존 첨부파일 ID
+		String atchFileId = req.getParameter("atchFile");
+		
 		// 2. 서비스 객체 생성하기
 		IMemberService memService = MemberServiceImpl.getInstance();
+		
+		IAtchFileService fileService = AtchFileServiceImpl.getInstance();
+		
+		AtchFileVO atchFileVO = null;
+		
+		try {
+			atchFileVO = fileService.saveAtchFileList(req);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		// 3. 회원정보 수정
 		MemberVO mv = new MemberVO();
@@ -54,6 +84,13 @@ public class UpdateMemberController extends HttpServlet {
 		mv.setMemName(memName);
 		mv.setMemTel(memTel);
 		mv.setMemAddr(memAddr);
+		
+		if(atchFileVO == null) { // 새로운 첨부파일이 없는 경우,
+			mv.setAtchFileId(Long.parseLong(atchFileId));
+		} else {
+			mv.setAtchFileId(atchFileVO.getAtchFileId());
+		}
+		
 		
 		int cnt = memService.updateMember(mv);
 	

@@ -63,6 +63,7 @@
 	형식) <sqlMap resource="경로명/파일명.xml"/>
 	-->
 	<sqlMap resource="sqlmap/member.xml"/>
+	<sqlMap resource="sqlmap/atchFile.xml"/>
 </sqlMapConfig>
 
 
